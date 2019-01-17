@@ -1,18 +1,26 @@
-
-import string
 import itertools
+import argparse
+
+#TODO: Add File Export To Command Line
+######################################################
+# Generate all possible combinations of a passphrase #
+######################################################
 class PasswordGenerator:
 
     def __init__(self, passphrase):
         self.mapping = {
-            "a" : ["A", "@","^"], "b" : ["B"],"c" : ["C"],"d" : ["D"],
-            "e" : ["E"], "f": ["F"], "g": ["G"],"h" : ["H","#"], "i" : ["I","!","1"],
-            "j" : ["J"], "k": ["K"], "l": ["L"], "m": ["M"], "n" : ["N"], "o": ["O","0"],
-            "p" : ["P"], "q" : ["Q"] ,"r" : ["R"] , "s" : ["S", "$"], "t" :["T"], "u": ["U"],
-            "v" : ["V"], "w": ["W"],  "x": ["X"], "z" : ["Z"]
+            "a" : ["a", "A", "@","^"], "b" : ["b","B"],"c" : ["c","C"], "d" : ["d","D"],
+            "e" : ["e","E"], "f": ["f","F"], "g": ["g","G"], "h" : ["h", "H","#"], "i" : ["i","I","!","1"],
+            "j" : ["j", "J"], "k": ["k","K"], "l": ["l","L"], "m": ["m","M"], "n" : ["n","N"], "o": ["o", "O","0"],
+            "p" : ["p", "P"], "q" : ["q", "Q"] ,"r" : ["r", "R"] , "s" : ["s","S", "$","5"], "t" :["t","T"], "u": ["u","U"],
+            "v" : ["v", "V","\/"], "w": ["w","W"],  "x": ["x","X"], "y": ["y","Y"], "z" : ["z","Z","2"]
         }
-        #p = self.characterMapping(passphrase)
-        self.productOf(passphrase)
+        self.allCombinations(passphrase)
+
+    def allCombinations(self,string):
+       com = map(''.join, itertools.product(*((self.mapping[c]) for c in string)))
+       for x in com:
+           print(x)
 
     def productOf(self, passphrase):
         letters = []
@@ -22,7 +30,7 @@ class PasswordGenerator:
                 letters.append(x)
         x = itertools.permutations(letters,len(passphrase))
         for xx in x:
-            print ''.join(xx)
+            print(''.join(xx))
 
 
     def characterMapping(self, passphrase):
@@ -30,8 +38,11 @@ class PasswordGenerator:
         for c in passphrase:
             for x in self.mapping[c]:
                 letters_used.append(x)
-
         return letters_used
 
 if __name__ == "__main__":
-    PasswordGenerator("ilikehotdogs")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("string", help="String to display all possible combinations for")
+    args = parser.parse_args()
+    passphrase = args.string
+    PasswordGenerator(passphrase.lower())
